@@ -130,7 +130,7 @@ public class DatasetCreator {
 
 	}
 	
-	public static void writeCSVFile(String projectName, MultiKeyMap mapToBuildDataset, int latestVersion) throws IOException {
+	public void writeCSVFile(String projectName, MultiKeyMap mapToBuildDataset, int latestVersion) throws IOException {
 
 		// Imposto il nome del file
 		try (FileWriter csvWriter = new FileWriter("csv/" + projectName + "_datasetDeliverableBuggyness.csv")) {
