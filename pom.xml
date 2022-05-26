@@ -4,16 +4,12 @@
   <artifactId>ISW2_Deliverable_Buggyness</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>ISW2_Deliverable_Buggyness</name>
-  <build>
-    <sourceDirectory>src</sourceDirectory>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
-        <configuration>
-          <release>13</release>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+  	<maven.compiler.target>1.8</maven.compiler.target>
+    <sonar.organization>valeriomoroni95</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+  </properties>
+  
 </project>
