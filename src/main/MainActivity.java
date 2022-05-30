@@ -63,27 +63,37 @@ public class MainActivity {
 
 		Map<Integer, List<Integer>> ticketsWithBuggyIndex;
 
-		// nomi dei progetti da svolgere
-		String[] projectList = { "OPENJPA" };
+		// nomi dei progetti da svolgere, inserire entrambi uno dopo l'altro o uno alla volta
+		String[] projectList = { "BOOKKEEPER" };
+		
+		//Inizializzo il logger
+		LoggerClass.setupLogger();
+		LoggerClass.infoLog("Avvio il programma per la creazione del dataset...");
 
 		for (String projectName : projectList) {
 
 			ticketsWithBuggyIndex = new HashMap<>();
 			ticketsList = new ArrayList<>();
 
-			// Multimap<Data release, nome versione, indice versione>
+			// Multimap<Data release, nome versione, indice versione>      Ordinamento naturale, utilizzo una linked list.
 			Multimap<LocalDate, String> versionListWithReleaseDate = MultimapBuilder.treeKeys().linkedListValues().build();
 
 			// Prendo la lista delle versioni con la data della release, formato: 2006-08-26=[0.9.0, 1]
 			versionListWithReleaseDate = getVersionAndReleaseDate(projectName);
-
+			
+			// Scrivo la repository del progetto in questione, da github
 			String projectRepository = "https://github.com/apache/" + projectName + ".git";
 
 			jiraLogic = new JiraLogic(versionListWithReleaseDate, mapToBuildDataset, ticketsWithBuggyIndex, ticketsList);
-			latestVersion = (versionListWithReleaseDate.size() / 2) / 2;
+			
+			//Prendo la prima metà delle versioni!
+			//Effettuo questa doppia divisione perché la size di una Multimap viene raddoppiata (key, value).
+			//Per esempio, per Bookkeeper, ho 14 versioni totali, ma la size di versionListWithReleaseDate esce 28.
+			//Per questo, per prendere solo la prima metà delle release, è come se dividessi per 4.
+			latestVersion = (versionListWithReleaseDate.size()/2)/2;
 
-			// Clono la repo nella cartella projectName
-
+			// Clono la repo nella cartella projectName, commenta questa linea di codice se il progetto è già
+			// stato scaricato e non cancellato (il programma è stato interrotto prima di terminare)
 			Git.cloneRepository().setURI(projectRepository).setDirectory(new File(projectName)).call();
 
 			// Prendo tutti i file nella repo
@@ -120,7 +130,8 @@ public class MainActivity {
 			dataBuilder.buildDatasetUp(projectName, jiraLogic, latestVersion, mapToBuildDataset);
 			// Scrivo il dataset in un file CSV
 			dataBuilder.writeCSVFile(projectName, mapToBuildDataset, latestVersion);
-
+			
+			LoggerClass.infoLog("Ho terminato di creare il dataset.");
 			// A fine utilizzo, cancello la cartella con la repo del progetto
 			FileUtils.delete(new File(projectName), 1);
 		}
@@ -131,30 +142,29 @@ public class MainActivity {
 	public static Multimap<LocalDate, String> getVersionAndReleaseDate(String projectName) throws IOException, JSONException {
 
 		Integer i;
+		//Creo una Multimap fatta così <Data release, Nome Release>
 		Multimap<LocalDate, String> versionsList = MultimapBuilder.treeKeys().linkedListValues().build();
 		String releaseName = null;
 
 		// Url per prendere le informazioni associate al progetto in Jira
 		String url = "https://issues.apache.org/jira/rest/api/2/project/" + projectName;
-
+		
+		//Mi vengono stampate tutti i JSONObject con le informazioni da Jira
 		JSONObject json = ParserJson.readJsonFromUrl(url);
 		
-		System.out.println(json.toString(4));
+		LoggerClass.infoLog("Inizio a prendere le versioni e le date delle release...");
 
 		// Prendo l'array JSON associato alla versione del progetto
 		JSONArray versions = json.getJSONArray("versions");
-		
-		System.out.println(versions.toString(4));
 
 		// Per ogni versione
 		for (i = 0; i < versions.length(); i++) {
 
-			// controllo se ha una data per la release ed un nome e l'aggiungo alla lista
+			// controllo se ha una data per la release ed un nome
 			if (versions.getJSONObject(i).has(RELEASE_DATE) && versions.getJSONObject(i).has("name")) {
 				releaseName = versions.getJSONObject(i).get("name").toString();
 				
-				System.out.println(releaseName);
-				
+				//La aggiungo alla lista delle versioni (data, nome release)
 				versionsList.put(LocalDate.parse(versions.getJSONObject(i).get(RELEASE_DATE).toString()), releaseName);
 			}
 		}
@@ -163,11 +173,9 @@ public class MainActivity {
 		int versionCount = 1;
 		for (LocalDate ld : versionsList.keySet()) {
 			versionsList.put(ld, String.valueOf(versionCount));
-			//versionsList.put(ld, String.valueOf(versionCount).length() > 1 ? String.valueOf(versionCount):"0"+String.valueOf(versionCount));
 			versionCount++;
 		}
 		
-		System.out.println(versionsList);
 		return versionsList;
 	}
 	
@@ -178,7 +186,8 @@ public class MainActivity {
 		Integer i = 0;
 		Integer total = 1;
 		String key = null;
-
+		
+		LoggerClass.infoLog("Inizio a cercare i ticket con bug, chiusi o risolti, con resolution fixed, da Jira...");
 		// Get JSON API for closed bugs w/ AV in the project
 		do {
 			// Only gets a max of 1000 at a time, so must do this multiple times if bugs
@@ -196,25 +205,21 @@ public class MainActivity {
 			for (; i < total && i < j; i++) {
 
 				JSONObject singleJsonObject = (JSONObject) issues.getJSONObject(i % 1000).get("fields");
-				System.out.println(singleJsonObject);
 				// Mi prendo la chiave, ossia il ticket ID
 				key = issues.getJSONObject(i % 1000).get("key").toString();
-				
-				System.out.println("Questa è la key demme: "+ key);
 				// ed il JSONArray associato alle Affected Version
 				JSONArray affectedVersionArray = singleJsonObject.getJSONArray("versions");
-				System.out.println("Questo è l'array delle AV: "+affectedVersionArray);
-				//Aggiungo alla lista dei ticket l'ID dello stesso, splittandolo dalla chiave che riporta "NOME-int"
+				//Aggiungo alla lista dei ticket l'ID dello stesso, splittandolo dalla chiave che riporta "NOME-#intero"
 				ticketsList.add(Integer.valueOf(key.split("-")[1]));
 				
-
 				// Estraggo una lista Java dal JSONArray per prendermi la lista delle affected versions
 				List<String> affectedVersionList = jiraLogic.getJsonAVList(affectedVersionArray);
 
-				// Calcolo l'indice delle Affected Version del ticket [InjectedVersion,
-				// FixedVersion)
+				// Calcolo l'indice delle Affected Version del ticket [InjectedVersion,FixedVersion)
 				
-				//Lo split viene eseguito sulla "T" e viene preso il primo elemento perché è la data, dopo ci sarebbe l'ora
+				//Lo split viene eseguito sulla "T" e viene preso il primo elemento perché è la data, dopo ci sarebbe l'ora,
+				// che ignoro perché inutile per i nostri calcoli. Sto passando la lista delle affectedVersion, la resolutionDate,
+				// la data di creazione del ticket e l'ID dello stesso.
 				jiraLogic.getBuggyVersionJiraAVList(affectedVersionList,
 						singleJsonObject.getString("resolutiondate").split("T")[0],
 						singleJsonObject.getString("created").split("T")[0], Integer.parseInt(key.split("-")[1]));

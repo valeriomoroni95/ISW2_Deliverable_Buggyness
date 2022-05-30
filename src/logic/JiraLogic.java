@@ -21,6 +21,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import main.LoggerClass;
+
 public class JiraLogic {
 
 	// Multimap<data della release, nome versione, indice versione>
@@ -74,17 +76,19 @@ public class JiraLogic {
 	public List<String> getJsonAVList(JSONArray json) throws JSONException {
 
 		List<String> affectedVersionList = new ArrayList<>();
-
+		
+		//Se il JSONArray è non vuoto
 		if (json.length() > 0) {
 
 			// Per ciascuna release nelle Affected Version
 			for (int i = 0; i < json.length(); i++) {
-
+				
+				//Prendo il singolo elemento nel JSONArray
 				JSONObject singleRelease = json.getJSONObject(i);
 
 				// controlla se la release ha una data
 				if (singleRelease.has(RELEASE_DATE)) {
-					//se la release ha una data, la aggiungo alla lista prendendo il campo nome del JSONObject
+					//se la release ha una data, la aggiungo alla lista prendendo il campo "nome" del JSONObject
 					affectedVersionList.add(singleRelease.getString("name"));
 				}
 			}
@@ -117,10 +121,12 @@ public class JiraLogic {
 				outcomes.add(entry.getKey());
 			}
 		}
-		//System.out.println(outcomes);
+		
 		return outcomes;
 	}
 
+	
+	//Dato il nome del progetto ed il messaggio di commit, controllo se quest'ultimo ha il ticketID riportato.
 	public List<Integer> getTicketMessageCommitBugFix(String commitMessage, String projectName) {
 
 		List<Integer> outcomes = new ArrayList<>();
@@ -130,7 +136,7 @@ public class JiraLogic {
 		for (Integer entry : ticketsList) {
 
 			// Controlla se il messaggio di commit contiene l'espressione
-			// "NomeProgetto-IssueID"
+			// "NomeProgetto-IssueID" 
 			pattern = Pattern.compile("\\b" + projectName + "-" + entry + "\\b", Pattern.CASE_INSENSITIVE);
 			matcher = pattern.matcher(commitMessage);
 
@@ -222,15 +228,14 @@ public class JiraLogic {
 		if (!ticketAssociatedWithCommit.isEmpty() && (entry.getChangeType() == DiffEntry.ChangeType.MODIFY
 				|| entry.getChangeType() == DiffEntry.ChangeType.DELETE)) {
 
-			// Per ogni ticket (IV, OV, ticketId)
+			// Per ogni ticket (IV, OV, ticketId), vado a passi di 3
 			for (int i = 0; i < ticketAssociatedWithCommit.size(); i += 3) {
 
 				int startVersion = ticketAssociatedWithCommit.get(i);
 				int endVersion = ticketAssociatedWithCommit.get(i + 1);
 
 				// per ciascuna versione nella lista di AV controllo se l'indice di versione è
-				// incluso
-				// nella prima metà delle release
+				// incluso nella prima metà delle release
 				for (int version = startVersion; version < endVersion && version < numberOfVersions; version++) {
 
 					if (!mapToBuildDataset.containsKey(version, entry.getNewPath())) {
@@ -265,13 +270,15 @@ public class JiraLogic {
 		if (ivIndex != 0) {
 
 			// Calcolo P e l'aggiungo alla lista di tutti i ticket con Proportion
-			// Se non ho valori errati di fv, ov ed iv
+			// Se non ho valori errati della Fixed Version, ovvero che quest'ultima
+			// sia uguale all'OV, uguale all'IV o addirittura antecedente a quest'ultima.
 			if (!(fvIndex == ovIndex || fvIndex == ivIndex || fvIndex < ivIndex)) {
 				//Mi calcolo il valore di proportion utilizzando la formula
 				proportion = getAVProportion(ivIndex, fvIndex, ovIndex);
 				
 				//Se il valore di proportion è positivo, inserisco il valore nella mappa 
-				//in questo formato: 203=[1.0, 2.0] 
+				//in questo formato: 203=[1.0, 2.0], ovvero n°ticket, 1 ed il valore appena
+				//calcolato con la formula. 
 				if (proportion > 0) {
 					proportionTickets.put(ticketID, 1.0);
 					proportionTickets.put(ticketID, proportion);
@@ -285,21 +292,24 @@ public class JiraLogic {
 
 			// Se l'affected version non è presente, allora metto il ticket nella lista dei tickets 
 			// che hanno bisogno di proportion per la stime dell'Injected Version
+			// Ottengo sempre ticketID = [OV, FV]
 			ticketNoAVList.put(ticketID, ovIndex);
 			ticketNoAVList.put(ticketID, fvIndex);
 		}
-		System.out.println("Questa è la lista ticketNoAVList: "+ticketNoAVList.toString());
 	}
 
-	// Calcolo l'IV per i ticket con lista delle AV da Jira
+	// Calcolo l'IV per i ticket con lista delle AV da Jira non corretta
 
 	public void getBuggyVersionProportionTicket() {
 
 		int ivIndx = 1;
+		
+		LoggerClass.infoLog("Inizio ad usare proportion dove necessario...");
 
 		// Vedo tra tutti i commit senza lista delle AV
 		for (int i : ticketNoAVList.keySet()) {
-
+			
+			//Il primo elemento è l'OV, il secondo è la FV.
 			int fvIndx = Iterables.get(ticketNoAVList.get(i), 1);
 			int ovIndx = Iterables.get(ticketNoAVList.get(i), 0);
 
@@ -309,10 +319,10 @@ public class JiraLogic {
 			// Controllo se la lista delle AV è non vuota
 			if (fvIndx != ovIndx) {
 
-				// Uso la formula se il valore medio dei ticket precedenti è >0
+				// Uso la formula per il calcolo dell'IV se il valore medio dei ticket precedenti è >0
 				if (proportion > 0) {
 					ivIndx = fvIndx - (fvIndx - ovIndx) * proportion;
-					// se il valore di IV è minore di 1, la imposto di default a 1
+					// se il valore di IV è minore di 1, la imposto di default a 1 (ovviamente IV non può essere <1)
 					if (ivIndx < 1)
 						ivIndx = 1;
 					// altrimenti, per semplicità, assumo IV=OV
@@ -332,7 +342,7 @@ public class JiraLogic {
 
 		int lastIndex = 0;
 
-		// Iterate over all version with release date
+		// Itero su tutte le versioni che hanno una release date
 		for (LocalDate ld : versionListWithReleaseDateAndIndex.keySet()) {
 
 			Collection<String> lineKey = versionListWithReleaseDateAndIndex.get(ld);
@@ -371,7 +381,7 @@ public class JiraLogic {
 		// Per ogni ticket che ha un valore calcolato di Proportion
 		for (int i : proportionTickets.keySet()) {
 
-			// Controllo se l'ID del ticket è inferiore al considerato e ci sommo P
+			// Controllo se l'ID del ticket è inferiore al considerato e ci sommo il valore calcolato di P
 			if (i < ticketID && Iterables.get(proportionTickets.get(i), 0) != -1.0) {
 				count += 1;
 				proportion += Iterables.get(proportionTickets.get(i), 1);
@@ -391,7 +401,7 @@ public class JiraLogic {
 	}
 
 	// Calcolo con la formula il valore di proportion a partire dal ticket
-	// considerato 
+	// considerato ---> (FV-IV)/(FV-OV)
 	public double getAVProportion(int iv, int fv, int ov) {
 		double fvIv = (double) fv - iv;
 		double fvOv = (double) fv - ov;
@@ -403,15 +413,16 @@ public class JiraLogic {
 	public void getBuggyVersions(int ticketID, int fvIndx, int ivIndx) {
 
 		List<Integer> avVersionListNotEmpty = new ArrayList<>();
-		// Controllo sugli indici delle versioni
+		// Controllo sugli indici delle versioni, ossia FV ed IV non possono essere uguali
+		// e, soprattutto, IV deve essere < di FV
 		if (fvIndx != ivIndx && ivIndx < fvIndx) {
 
 			// Aggiungo il ticket alla lista di ticket con AV list non vuota
 			avVersionListNotEmpty.add(ivIndx);
 			avVersionListNotEmpty.add(fvIndx);
+			// Qui ottengo ticketID = [IV, FV]
 			ticketBuggyIndex.put(ticketID, avVersionListNotEmpty);
 		}
-		System.out.println("Valore di ticketBuggyIndex: "+ticketBuggyIndex.toString());
 	}
 
 	// Calcolo l'indice della Fixed Version
@@ -471,7 +482,6 @@ public class JiraLogic {
 				oxIndexValue = Iterables.get(lineKey, 1);
 			}
 			ovIndex = Integer.valueOf(oxIndexValue);
-			
 			
 			//Mi fermo se la data è successiva o uguale alla data di creazione del ticket
 			if (ld.isAfter(LocalDate.parse(ticketCreationDate)) || ld.isEqual(LocalDate.parse(ticketCreationDate))) {

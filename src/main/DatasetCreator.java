@@ -57,7 +57,8 @@ public class DatasetCreator {
 		// Imposto la cartella del progetto
 		String repoFolder = System.getProperty(USER_DIRECTORY) + "/" + projectName + "/.git";
 		Repository repo = builder.setGitDir(new File(repoFolder)).readEnvironment().findGitDir().build();
-
+		
+		LoggerClass.infoLog("Inizio a costruirmi i dati per il csv...");
 		// Provo ad aprire la repo su Git
 		try (Git git = new Git(repo)) {
 
@@ -83,7 +84,8 @@ public class DatasetCreator {
 
 					// Vedo se l'indice della versione fa parte della prima metà delle release
 					if (appartainingVersion < latestVersion + 1) {
-
+						
+						//Analizzo il messaggio di commit di bugfix del ticket e lo aggiungo alla lista
 						List<Integer> ticketBugFix = jiraLogic.getTicketMessageCommitBugFix(commit.getFullMessage(),
 								projectName);
 
@@ -97,7 +99,7 @@ public class DatasetCreator {
 
 							differencesBetweenCommits.setRepository(repo);
 
-							// Get the difference between the two commit
+							// Prendo le differenze tra i due commit
 							filesChanged = differencesBetweenCommits.scan(commit.getParent(0), commit);
 
 							// Per ogni file cambiato nella lista dei file cambiati
@@ -131,7 +133,9 @@ public class DatasetCreator {
 	}
 	
 	public void writeCSVFile(String projectName, MultiKeyMap mapToBuildDataset, int latestVersion) throws IOException {
-
+		
+		LoggerClass.infoLog("Inizio ufficialmente a scrivere il csv, dopo aver fatto tutti i calcoli dovuti");
+		
 		// Imposto il nome del file
 		try (FileWriter csvWriter = new FileWriter("csv/" + projectName + "_datasetDeliverableBuggyness.csv")) {
 
@@ -180,6 +184,8 @@ public class DatasetCreator {
 			String buggy;
 			int averageLOCAdded;
 			int averageChgSet;
+			
+			//Creo un iterator per esplorare la mappa che mi costruirà il dataset
 			MapIterator datasetIterator = mapToBuildDataset.mapIterator();
 
 			// Itero sul dataset
@@ -195,15 +201,11 @@ public class DatasetCreator {
 				//TODO: Se vuoi il dataset di OpenJpa ordinato per versione agisci su questa insert.
 				
 				monthsMap.put(String.valueOf(key.getKey(0)) + "," + (String) key.getKey(1), fileMetrics);
-				//monthsMap.put(((Integer)key.getKey(0))+ ","+ (String) key.getKey(1), fileMetrics);
-				//Map<String, List<Integer>> orderedMap = new TreeMap<>();
 			}
 
 			for (Map.Entry<String, List<Integer>> mapEntry : monthsMap.entrySet()) {
 
 				ArrayList<Integer> fileMetrics = (ArrayList<Integer>) mapEntry.getValue();
-				
-				//System.out.println(mapEntry.getKey());
 				
 				// Controllo che l'indice della versione sia contenuto nella prima metà delle
 				// release
