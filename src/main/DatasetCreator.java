@@ -31,7 +31,7 @@ public class DatasetCreator {
 	
 	
 	public DatasetCreator() {
-		
+		//Non fa niente, creato per risolvere code smell
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
