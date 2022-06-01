@@ -12,6 +12,14 @@
     <sonar.organization>valeriomoroni95</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
+  
+  <build>
+   <resources>
+     <resource>
+       <directory>src</directory>
+     </resource>
+   </resources>
+ </build>
 
   <dependencies>
     <dependency>
