@@ -35,6 +35,7 @@ public class JiraLogic {
 	private Multimap<Integer, Integer> ticketNoAVList = MultimapBuilder.treeKeys().linkedListValues().build();
 
 	// MultiKeyMap<Versione del file, path del file, lista delle metriche>
+	@SuppressWarnings("rawtypes")
 	private MultiKeyMap mapToBuildDataset;
 
 	private List<Integer> ticketsList;
@@ -45,6 +46,7 @@ public class JiraLogic {
 	private static final String RELEASE_DATE = "releaseDate";
 	private static final int METRICS_NUMBER = 10;
 
+	@SuppressWarnings("rawtypes")
 	public JiraLogic(Multimap<LocalDate, String> versionListWithReleaseDateAndIndex, MultiKeyMap fileMapDataset,
 			Map<Integer, List<Integer>> ticketBuggyIndex, List<Integer> ticketList) {
 

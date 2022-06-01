@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,8 +22,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
-import com.google.common.collect.Multimap;
-
 import logic.JiraLogic;
 
 public class DatasetCreator {
@@ -37,9 +34,11 @@ public class DatasetCreator {
 	private int latestVersion;
 	
 	//[versione, nomefile]=[array di metriche]
+	@SuppressWarnings("rawtypes")
 	private MultiKeyMap mapToBuildDataset;
 	
 	//(projectName, jiraLogic, latestVersion, mapToBuildDateset)
+	@SuppressWarnings("rawtypes")
 	public DatasetCreator(String projectName, JiraLogic jiraLogic, int latestVersion, MultiKeyMap mapToBuildDataset) {
 
 		this.projectName = projectName;
@@ -49,6 +48,7 @@ public class DatasetCreator {
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void buildDatasetUp(String projectName, JiraLogic jiraLogic, int latestVersion, MultiKeyMap mapToBuildDataset) throws IOException, GitAPIException {
 
 		ArrayList<Integer> fileMetrics;
