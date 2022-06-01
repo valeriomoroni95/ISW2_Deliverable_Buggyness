@@ -13,7 +13,7 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
-  <dependencies>
+  <!--<dependencies>
     <dependency>
         <groupId>org.json</groupId>
         <artifactId>json</artifactId>
@@ -29,7 +29,7 @@
         <artifactId>slf4j-api</artifactId>
         <version>1.7.30</version>
     </dependency>
-  </dependencies>
+  </dependencies>-->
   
   
 </project>
