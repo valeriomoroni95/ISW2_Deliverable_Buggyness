@@ -21,9 +21,7 @@
         <version>3.8.0</version>
       </plugin>
     </plugins>
-  </build>
-
-  <dependencies>
+    <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
@@ -60,6 +58,9 @@
       <version>1.7.5</version>
     </dependency> 
   </dependencies>
+ </build>
+
+  
   
   
 </project>
