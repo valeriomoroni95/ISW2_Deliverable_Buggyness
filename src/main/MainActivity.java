@@ -1,38 +1,25 @@
 package main;
 
-import org.apache.commons.collections4.MapIterator;
-import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.LinkedMap;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.FileUtils;
-import org.eclipse.jgit.util.io.NullOutputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import logic.JiraLogic;
@@ -64,7 +51,7 @@ public class MainActivity {
 		Map<Integer, List<Integer>> ticketsWithBuggyIndex;
 
 		// nomi dei progetti da svolgere, inserire entrambi uno dopo l'altro o uno alla volta
-		String[] projectList = { "BOOKKEEPER" };
+		String[] projectList = { "OPENJPA" };
 		
 		//Inizializzo il logger
 		LoggerClass.setupLogger();
@@ -227,10 +214,6 @@ public class MainActivity {
 			}
 		} while (i < total);
 
-	}
-	
-	
-	
-	
+	}	
 	
 }

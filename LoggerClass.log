@@ -10870,3 +10870,91 @@
   <message>Ho terminato di creare il dataset.</message>
 </record>
 </log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-01T14:00:08.291819Z</date>
+  <millis>1654092008291</millis>
+  <nanos>819000</nanos>
+  <sequence>0</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Avvio il programma per la creazione del dataset...</message>
+</record>
+<record>
+  <date>2022-06-01T14:00:09.268816Z</date>
+  <millis>1654092009268</millis>
+  <nanos>816000</nanos>
+  <sequence>1</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a prendere le versioni e le date delle release...</message>
+</record>
+<record>
+  <date>2022-06-01T14:00:47.962139Z</date>
+  <millis>1654092047962</millis>
+  <nanos>139000</nanos>
+  <sequence>2</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a cercare i ticket con bug, chiusi o risolti, con resolution fixed, da Jira...</message>
+</record>
+<record>
+  <date>2022-06-01T14:00:50.029848Z</date>
+  <millis>1654092050029</millis>
+  <nanos>848000</nanos>
+  <sequence>3</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio ad usare proportion dove necessario...</message>
+</record>
+<record>
+  <date>2022-06-01T14:00:50.111812Z</date>
+  <millis>1654092050111</millis>
+  <nanos>812000</nanos>
+  <sequence>4</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a costruirmi i dati per il csv...</message>
+</record>
+<record>
+  <date>2022-06-01T14:01:34.759653Z</date>
+  <millis>1654092094759</millis>
+  <nanos>653000</nanos>
+  <sequence>5</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio ufficialmente a scrivere il csv, dopo aver fatto tutti i calcoli dovuti</message>
+</record>
+<record>
+  <date>2022-06-01T14:01:35.653036Z</date>
+  <millis>1654092095653</millis>
+  <nanos>36000</nanos>
+  <sequence>6</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Ho terminato di creare il dataset.</message>
+</record>
+</log>

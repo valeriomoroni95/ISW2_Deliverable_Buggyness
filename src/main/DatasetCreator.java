@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.apache.commons.collections4.MapIterator;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.MultiKeyMap;
@@ -48,7 +47,7 @@ public class DatasetCreator {
 		
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void buildDatasetUp(String projectName, JiraLogic jiraLogic, int latestVersion, MultiKeyMap mapToBuildDataset) throws IOException, GitAPIException {
 
 		ArrayList<Integer> fileMetrics;
@@ -132,6 +131,7 @@ public class DatasetCreator {
 
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void writeCSVFile(String projectName, MultiKeyMap mapToBuildDataset, int latestVersion) throws IOException {
 		
 		LoggerClass.infoLog("Inizio ufficialmente a scrivere il csv, dopo aver fatto tutti i calcoli dovuti");
@@ -198,7 +198,7 @@ public class DatasetCreator {
 				// Prendo la lista di metriche associate alla multikey
 				ArrayList<Integer> fileMetrics = (ArrayList<Integer>) mapToBuildDataset.get(key.getKey(0), key.getKey(1));
 				
-				//TODO: Se vuoi il dataset di OpenJpa ordinato per versione agisci su questa insert.
+				//Inserisco in monthsMap: --> [versione, nomefile, listadellemetriche] ---> ordine alfanumerico
 				
 				monthsMap.put(String.valueOf(key.getKey(0)) + "," + (String) key.getKey(1), fileMetrics);
 			}
