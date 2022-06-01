@@ -10958,3 +10958,207 @@
   <message>Ho terminato di creare il dataset.</message>
 </record>
 </log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-01T14:11:36.316744Z</date>
+  <millis>1654092696316</millis>
+  <nanos>744000</nanos>
+  <sequence>0</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Avvio il programma per la creazione del dataset...</message>
+</record>
+<record>
+  <date>2022-06-01T14:11:37.226984Z</date>
+  <millis>1654092697226</millis>
+  <nanos>984000</nanos>
+  <sequence>1</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a prendere le versioni e le date delle release...</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-01T14:11:49.357271Z</date>
+  <millis>1654092709357</millis>
+  <nanos>271000</nanos>
+  <sequence>0</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Avvio il programma per la creazione del dataset...</message>
+</record>
+<record>
+  <date>2022-06-01T14:11:50.228916Z</date>
+  <millis>1654092710228</millis>
+  <nanos>916000</nanos>
+  <sequence>1</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a prendere le versioni e le date delle release...</message>
+</record>
+<record>
+  <date>2022-06-01T14:13:01.288365Z</date>
+  <millis>1654092781288</millis>
+  <nanos>365000</nanos>
+  <sequence>2</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a cercare i ticket con bug, chiusi o risolti, con resolution fixed, da Jira...</message>
+</record>
+<record>
+  <date>2022-06-01T14:13:02.062160Z</date>
+  <millis>1654092782062</millis>
+  <nanos>160000</nanos>
+  <sequence>3</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio ad usare proportion dove necessario...</message>
+</record>
+<record>
+  <date>2022-06-01T14:13:02.070027Z</date>
+  <millis>1654092782070</millis>
+  <nanos>27000</nanos>
+  <sequence>4</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a costruirmi i dati per il csv...</message>
+</record>
+<record>
+  <date>2022-06-01T14:13:08.101894Z</date>
+  <millis>1654092788101</millis>
+  <nanos>894000</nanos>
+  <sequence>5</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio ufficialmente a scrivere il csv, dopo aver fatto tutti i calcoli dovuti</message>
+</record>
+<record>
+  <date>2022-06-01T14:13:08.326641Z</date>
+  <millis>1654092788326</millis>
+  <nanos>641000</nanos>
+  <sequence>6</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Ho terminato di creare il dataset.</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-06-01T14:21:44.571070Z</date>
+  <millis>1654093304571</millis>
+  <nanos>70000</nanos>
+  <sequence>0</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Avvio il programma per la creazione del dataset...</message>
+</record>
+<record>
+  <date>2022-06-01T14:21:45.501381Z</date>
+  <millis>1654093305501</millis>
+  <nanos>381000</nanos>
+  <sequence>1</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a prendere le versioni e le date delle release...</message>
+</record>
+<record>
+  <date>2022-06-01T14:22:49.221931Z</date>
+  <millis>1654093369221</millis>
+  <nanos>931000</nanos>
+  <sequence>2</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a cercare i ticket con bug, chiusi o risolti, con resolution fixed, da Jira...</message>
+</record>
+<record>
+  <date>2022-06-01T14:22:49.962354Z</date>
+  <millis>1654093369962</millis>
+  <nanos>354000</nanos>
+  <sequence>3</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio ad usare proportion dove necessario...</message>
+</record>
+<record>
+  <date>2022-06-01T14:22:49.969263Z</date>
+  <millis>1654093369969</millis>
+  <nanos>263000</nanos>
+  <sequence>4</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a costruirmi i dati per il csv...</message>
+</record>
+<record>
+  <date>2022-06-01T14:22:56.024507Z</date>
+  <millis>1654093376024</millis>
+  <nanos>507000</nanos>
+  <sequence>5</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio ufficialmente a scrivere il csv, dopo aver fatto tutti i calcoli dovuti</message>
+</record>
+<record>
+  <date>2022-06-01T14:22:56.227071Z</date>
+  <millis>1654093376227</millis>
+  <nanos>71000</nanos>
+  <sequence>6</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Ho terminato di creare il dataset.</message>
+</record>
+</log>

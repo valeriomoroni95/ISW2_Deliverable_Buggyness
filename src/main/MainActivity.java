@@ -36,22 +36,20 @@ public class MainActivity {
 	// Mappa<,Id del ticket (Injected Version, Fixed Version)>
 	private static List<Integer> ticketsList;
 
-	// Indice dell'ultimissima versione
-	private static int latestVersion;
-	
-	private static DatasetCreator dataBuilder;
-
 	// Stringhe utilizzate frequentemente
 	public static final String USER_DIRECTORY = "user.dir";
 	public static final String RELEASE_DATE = "releaseDate";
 	public static final String FILE_EXTENSION = ".java";
 
 	public static void main(String[] args) throws IOException, JSONException, GitAPIException {
+		
+		// Indice dell'ultimissima versione
+		int latestVersion;
 
 		Map<Integer, List<Integer>> ticketsWithBuggyIndex;
 
 		// nomi dei progetti da svolgere, inserire entrambi uno dopo l'altro o uno alla volta
-		String[] projectList = { "OPENJPA" };
+		String[] projectList = { "BOOKKEEPER" };
 		
 		//Inizializzo il logger
 		LoggerClass.setupLogger();
@@ -112,8 +110,10 @@ public class MainActivity {
 			// e che richiedono l'applicazione del metodo proportion
 			jiraLogic.getBuggyVersionProportionTicket();
 
-			// Costruisco il dataset (projectName, jiraLogic, latestVersion, mapToBuildDateset)
-			dataBuilder = new DatasetCreator(projectName, jiraLogic, latestVersion, mapToBuildDataset);
+			// Costruisco il dataset, partendo dall'oggetto dataBuilder
+			DatasetCreator dataBuilder= new DatasetCreator();
+			//passo al metodo il nome del progetto, l'istanza di JiraLogic, l'indice dell'ultima versione
+			//e la mappa dove andrò a costruire il dataset
 			dataBuilder.buildDatasetUp(projectName, jiraLogic, latestVersion, mapToBuildDataset);
 			// Scrivo il dataset in un file CSV
 			dataBuilder.writeCSVFile(projectName, mapToBuildDataset, latestVersion);

@@ -58,6 +58,7 @@ public class JiraLogic {
 
 	// Metto un record vuoto per le metriche nella mappa (indice release, nome del file, metriche con valori 0)
 
+	@SuppressWarnings("unchecked")
 	public void putEmptyRecord(int releaseIndex, String filename) {
 	
 		if (!mapToBuildDataset.containsKey(releaseIndex, filename)) {
@@ -223,6 +224,7 @@ public class JiraLogic {
 
 	// Imposto il file come "buggy" nella multi key map del dataset
 
+	@SuppressWarnings("unchecked")
 	public void setClassBugginess(List<Integer> ticketAssociatedWithCommit, DiffEntry entry, int numberOfVersions) {
 
 		// Controllo la lista dei ticket associati al commit ed il tipo di modifiche

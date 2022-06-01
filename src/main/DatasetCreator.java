@@ -28,22 +28,9 @@ public class DatasetCreator {
 	// Stringhe utilizzate frequentemente
 	public static final String USER_DIRECTORY = "user.dir";
 	public static final String FILE_EXTENSION = ".java";
-	private String projectName;
-	private JiraLogic jiraLogic;
-	private int latestVersion;
 	
-	//[versione, nomefile]=[array di metriche]
-	@SuppressWarnings("rawtypes")
-	private MultiKeyMap mapToBuildDataset;
 	
-	//(projectName, jiraLogic, latestVersion, mapToBuildDateset)
-	@SuppressWarnings("rawtypes")
-	public DatasetCreator(String projectName, JiraLogic jiraLogic, int latestVersion, MultiKeyMap mapToBuildDataset) {
-
-		this.projectName = projectName;
-		this.jiraLogic = jiraLogic;
-		this.latestVersion = latestVersion;
-		this.mapToBuildDataset = mapToBuildDataset;
+	public DatasetCreator() {
 		
 	}
 	
