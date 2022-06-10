@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import weka.classifiers.Evaluation;
 
 public class ArffBuilder {
 	
@@ -14,9 +13,6 @@ public class ArffBuilder {
 	private static final String TRAINING = "_training.arff";
 	private static final String TESTING = "_testing.arff";
 	
-	public ArffBuilder() {
-		
-	}
 	
 	
 	public static int appendToCSV(FileWriter csvMaker, String row) throws IOException {
