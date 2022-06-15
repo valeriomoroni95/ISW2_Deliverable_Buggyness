@@ -19,20 +19,20 @@ public class ArffBuilder {
 		
 		int defectiveCount = 0;
 		
-		String[] split_row = row.split(",");
+		String[] splitRow = row.split(",");
 		
 		// Salto le prime due colonne lette dal csv, ovvero n°versione + nome_file
-		for (int i = 2; i < split_row.length; i++) {
+		for (int i = 2; i < splitRow.length; i++) {
 			//Se con l'indice arrivo alla colonna della buggyness
-			if (i == split_row.length - 1) {
+			if (i == splitRow.length - 1) {
 				//Se è buggy aumento il contatore di 1
-				if(split_row[i].equals("Yes"))
+				if(splitRow[i].equals("Yes"))
 					defectiveCount += 1;
 				//Vado a capo dopo l'ultimo elemento letto
-				csvMaker.append(split_row[i] + "\n");
+				csvMaker.append(splitRow[i] + "\n");
 			} else {
 				//Se non è l'ultima colonna scrivo l'elemento ed aggiungo una virgola al csv.
-				csvMaker.append(split_row[i] + ",");
+				csvMaker.append(splitRow[i] + ",");
 			}
 		}
 		return defectiveCount;
@@ -48,7 +48,7 @@ public class ArffBuilder {
 		ArrayList<Integer> statsHolder = new ArrayList<>();
 
 		// Creo il file .arff con il nome del progetto in questione 
-		try (FileWriter csvMaker = new FileWriter("arff/"+projectName + TRAINING)) {
+		try (FileWriter csvMaker = new FileWriter(projectName + TRAINING)) {
 
 			// Aggiungo le dichiarazioni degli attributi , del progetto e dei dati
 			csvMaker.append("@relation " + projectName + "\n\n");
@@ -82,6 +82,8 @@ public class ArffBuilder {
 						defectiveCount += appendToCSV(csvMaker, line);
 					}
 				}
+				System.out.println("Training defective: "+ defectiveCount);
+				System.out.println("Training file: "+ fileCount);
 				csvMaker.flush();
 
 				statsHolder.add(fileCount);
@@ -100,7 +102,7 @@ public class ArffBuilder {
 		int defectiveCount = 0;
 		ArrayList<Integer> statsHolder = new ArrayList<>();
 		// Creo il file .arff con il nome del progetto preso in esame
-		try (FileWriter csvWriter = new FileWriter("arff/"+projectName + TESTING)) {
+		try (FileWriter csvWriter = new FileWriter(projectName + TESTING)) {
 
 			// Aggiungo le dichiarazioni degli attributi, del progetto e dei dati
 			csvWriter.append("@relation " + projectName + "\n\n");
@@ -125,7 +127,8 @@ public class ArffBuilder {
 				// Leggo fino alla fine 
 				while ((line = reader.readLine()) != null){  
 
-					// Controllo se la versione è uguale a quella selezionata per il testing
+					// Controllo se la versione è uguale a quella selezionata per il testing.
+					// Uso sempre tutte le versioni precedenti alla corrente.
 					if (Integer.parseInt(line.split(",")[0]) == testing ) {
 
 						fileCount+= 1;
@@ -134,6 +137,8 @@ public class ArffBuilder {
 						defectiveCount += appendToCSV(csvWriter, line);
 					}
 				}
+				System.out.println("Testing defective: "+defectiveCount);
+				System.out.println("Testing file: "+fileCount);
 				csvWriter.flush();
 				statsHolder.add(fileCount);
 				statsHolder.add(defectiveCount);
