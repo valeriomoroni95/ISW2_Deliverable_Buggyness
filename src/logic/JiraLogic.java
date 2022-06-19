@@ -349,7 +349,7 @@ public class JiraLogic {
 
 	// Calcolo l'indice della versione d'appartenenza di un file, data in input
 	// la data del commit. Formato -->2013-03-27 = [4.2.1, 5]. 
-	public int getCommitAppartainingVersionIndex(LocalDate fileCommitDate, String projectName) {
+	public int getCommitAppartainingVersionIndex(LocalDate fileCommitDate) {
 		
 		int lastIndex = 0;
 		// Itero su tutte le versioni che hanno una release date

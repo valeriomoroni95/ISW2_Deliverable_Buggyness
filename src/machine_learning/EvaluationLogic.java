@@ -38,11 +38,11 @@ public class EvaluationLogic {
 
 					//Creo il file .arff per il training, fino alla versione n-esima del progetto in questione
 					//Itero dalla prima all'ultima, una alla volta.
-					System.out.println("Creo training con walking forward all'iterazione: "+j);
+					
 					ArffBuilder.buildTrainingSetWalkForward(projects[i], j);
 
 					//Creo il file .arff per il testing, fino alla versione n+1, secondo la tecnica Walk Forward
-					System.out.println("Creo testing con walking forward all'iterazione: "+(j+1));
+					
 					ArffBuilder.buildTestingSetWalkForward(projects[i] ,j+1);
 
 					// Prendo i file .arff appena creati per darli in input a Weka

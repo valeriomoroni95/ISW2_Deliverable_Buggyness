@@ -14,6 +14,9 @@ public class ArffBuilder {
 	private static final String TESTING = "_testing.arff";
 	
 	
+	private ArffBuilder() throws Exception {
+		throw new Exception("This should not be called!");
+	}
 	
 	public static int appendToCSV(FileWriter csvMaker, String row) throws IOException {
 		

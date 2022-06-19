@@ -148,25 +148,8 @@ public class MainActivity {
 		JSONArray versions = json.getJSONArray("versions");
 		
 		//Cambio alcuni nomi e versioni di Bookkeeper perché sbagliate e non aggiornate.
-		if(projectName=="BOOKKEEPER") {
-			for (i = 0; i < versions.length(); i++) {
-			JSONObject item = versions.getJSONObject(i);
-			if(item.get("name").equals("4.1.1") && item.get(RELEASE_DATE).equals("2013-01-16")) {
-				item.put("name", "4.2.1");
-				item.put(RELEASE_DATE, "2013-02-27");
-			}else if(item.get("name").equals("4.2.3") && item.get(RELEASE_DATE).equals("2014-06-27")) {
-				item.put(RELEASE_DATE, "2013-06-27");
-			}else if(item.get("name").equals("4.3.0") && item.get(RELEASE_DATE).equals("2014-02-02")) {
-				item.put(RELEASE_DATE, "2014-10-14");
-			}else if(item.get("name").equals("4.2.1") && item.get(RELEASE_DATE).equals("2013-03-27")) {
-				item.put("name", "4.2.4");
-				item.put(RELEASE_DATE, "2015-01-16");
-			}else if(item.get("name").equals("4.5.1") && item.get(RELEASE_DATE).equals("2017-09-10")) {
-				item.put(RELEASE_DATE, "2017-11-22");
-			}else if(item.get("name").equals("4.6.0") && item.get(RELEASE_DATE).equals("2017-11-10")) {
-				item.put(RELEASE_DATE, "2017-12-27");
-			}
-			}
+		if(projectName.equals("BOOKKEEPER")) {
+			ParserJson.fixBookkeeperVersions(versions,RELEASE_DATE);
 		}
 		
 		// Per ogni versione

@@ -64,7 +64,7 @@ public class DatasetCreator {
 							.atZone(ZoneId.systemDefault()).toLocalDate();
 
 					// Prendo la versione di appartenenza del commit
-					int appartainingVersion = jiraLogic.getCommitAppartainingVersionIndex(commitDate, projectName);
+					int appartainingVersion = jiraLogic.getCommitAppartainingVersionIndex(commitDate);
 					List<DiffEntry> filesChanged;
 
 					// Vedo se l'indice della versione fa parte della prima metà delle release
