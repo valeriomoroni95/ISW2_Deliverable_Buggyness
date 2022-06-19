@@ -43,7 +43,7 @@ public class MainActivity {
 
 	public static void main(String[] args) throws IOException, JSONException, GitAPIException {
 		
-		// Indice dell'ultimissima versione
+		// Indice dell'ultimissima versione prendibile in considerazione
 		int latestVersion;
 
 		Map<Integer, List<Integer>> ticketsWithBuggyIndex;
@@ -93,6 +93,7 @@ public class MainActivity {
 					if (f.toString().endsWith(FILE_EXTENSION)) {
 
 						// metto la coppia (versione, pathname del file) nella map del dataset
+						// putEmptyRecord aggiunge la lista di metriche azzerate per ogni file nella versione
 						for (int i = 1; i < (latestVersion) + 1; i++) {
 							jiraLogic.putEmptyRecord(i, f.toString().replace(
 									Paths.get(System.getProperty(USER_DIRECTORY)).toString() + "/" + projectName + "/",
@@ -126,6 +127,8 @@ public class MainActivity {
 	}
 
 	
+	// Prende in input il nome del progetto e si prende le versioni e le date delle release.
+	// Bookkeeper ha smesso di utilizzare Jira per gli Issue ed usa esclusivamente GitHub.
 	public static Multimap<LocalDate, String> getVersionAndReleaseDate(String projectName) throws IOException, JSONException {
 
 		Integer i;
@@ -136,17 +139,39 @@ public class MainActivity {
 		// Url per prendere le informazioni associate al progetto in Jira
 		String url = "https://issues.apache.org/jira/rest/api/2/project/" + projectName;
 		
-		//Mi vengono stampate tutti i JSONObject con le informazioni da Jira
+		//Mi vengono stampati tutti i JSONObject con le informazioni da Jira
 		JSONObject json = ParserJson.readJsonFromUrl(url);
 		
 		LoggerClass.infoLog("Inizio a prendere le versioni e le date delle release...");
 
 		// Prendo l'array JSON associato alla versione del progetto
 		JSONArray versions = json.getJSONArray("versions");
-
+		
+		//Cambio alcuni nomi e versioni di Bookkeeper perché sbagliate e non aggiornate.
+		if(projectName=="BOOKKEEPER") {
+			for (i = 0; i < versions.length(); i++) {
+			JSONObject item = versions.getJSONObject(i);
+			if(item.get("name").equals("4.1.1") && item.get(RELEASE_DATE).equals("2013-01-16")) {
+				item.put("name", "4.2.1");
+				item.put(RELEASE_DATE, "2013-02-27");
+			}else if(item.get("name").equals("4.2.3") && item.get(RELEASE_DATE).equals("2014-06-27")) {
+				item.put(RELEASE_DATE, "2013-06-27");
+			}else if(item.get("name").equals("4.3.0") && item.get(RELEASE_DATE).equals("2014-02-02")) {
+				item.put(RELEASE_DATE, "2014-10-14");
+			}else if(item.get("name").equals("4.2.1") && item.get(RELEASE_DATE).equals("2013-03-27")) {
+				item.put("name", "4.2.4");
+				item.put(RELEASE_DATE, "2015-01-16");
+			}else if(item.get("name").equals("4.5.1") && item.get(RELEASE_DATE).equals("2017-09-10")) {
+				item.put(RELEASE_DATE, "2017-11-22");
+			}else if(item.get("name").equals("4.6.0") && item.get(RELEASE_DATE).equals("2017-11-10")) {
+				item.put(RELEASE_DATE, "2017-12-27");
+			}
+			}
+		}
+		
 		// Per ogni versione
 		for (i = 0; i < versions.length(); i++) {
-
+			
 			// controllo se ha una data per la release ed un nome
 			if (versions.getJSONObject(i).has(RELEASE_DATE) && versions.getJSONObject(i).has("name")) {
 				releaseName = versions.getJSONObject(i).get("name").toString();
@@ -162,11 +187,13 @@ public class MainActivity {
 			versionsList.put(ld, String.valueOf(versionCount));
 			versionCount++;
 		}
+		//versionsList ora contiene: <DataRelease = nomeRelease, versionCount>
 		
 		return versionsList;
 	}
 	
-	
+	//Utilizzo il codice del professore, RetrieveTicketsID, per cercare i ticket con bug chiusi o risolti,
+	//con resolution fixed da Jira
 	public static void getBuggyVersionAVTicket(String projectName) throws IOException, JSONException {
 
 		Integer j = 0;

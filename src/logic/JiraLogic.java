@@ -68,7 +68,7 @@ public class JiraLogic {
 			for (int i = 0; i < METRICS_NUMBER; i++) {
 				emptyArrayList.add(0);
 			}
-
+			
 			mapToBuildDataset.put(releaseIndex, filename, emptyArrayList);
 		}
 	}
@@ -218,7 +218,7 @@ public class JiraLogic {
 				outcome.set(6, chgSetSize);
 			}
 		}
-
+		
 		return outcome;
 	}
 
@@ -256,7 +256,8 @@ public class JiraLogic {
 	}
 
 	// Calcola il valore di proportion usando i ticket con lista delle AV prese da
-	// Jira
+	// Jira. Mi passo la lista delle Affected Version, la resolutionDate, la creationDate
+	// ed il ticket ID. Calcolo anche Proportion per i ticket con associati versioni valide.
 	public void getBuggyVersionJiraAVList(List<String> affectedVersionList, String resolutionDate, String creationDate,
 			int ticketID) {
 		
@@ -265,9 +266,14 @@ public class JiraLogic {
 		int fvIndex = 0;
 		int ivIndex = 0;
 		int ovIndex = 0;
-
+		
+		//Per l'opening version passo la data di creazione del ticket, perché è la prima versione dopo.
 		ovIndex = getOpeningVersion(creationDate);
+		//Per la fixed version passo la data di risoluzione del ticket, perché è la prima versione dopo.
 		fvIndex = getFixedVersion(resolutionDate);
+		//Per l'injected version ho bisogno della lista delle Affected Version
+		//e la data di creazione del ticket. E' la versione con data di 
+		//rilascio minore tra le tutte presenti all’interno della lista delle Affected Version.
 		ivIndex = getIVfromAffectedVersion(affectedVersionList, creationDate);
 
 		// Se l'indice di IV è !=0, allora il ticket ha associato una AV valida
@@ -282,14 +288,14 @@ public class JiraLogic {
 				
 				//Se il valore di proportion è positivo, inserisco il valore nella mappa 
 				//in questo formato: 203=[1.0, 2.0], ovvero n°ticket, 1 ed il valore appena
-				//calcolato con la formula. 
+				//calcolato con la formula. Applico proportion increment.
 				if (proportion > 0) {
 					proportionTickets.put(ticketID, 1.0);
 					proportionTickets.put(ticketID, proportion);
 				}
 			}
 			
-			// Prendo l'indice di IV e FV del ticket
+			// Prendo l'indice di IV e FV del ticket. Qui ottengo ticketID = [IV, FV].
 			getBuggyVersions(ticketID, fvIndex, ivIndex);
 
 		} else {
@@ -302,7 +308,8 @@ public class JiraLogic {
 		}
 	}
 
-	// Calcolo l'IV per i ticket con lista delle AV da Jira non corretta
+	// Calcolo l'IV per i ticket con lista delle AV da Jira non corretta, 
+	// applicando proportion.
 
 	public void getBuggyVersionProportionTicket() {
 
@@ -341,31 +348,28 @@ public class JiraLogic {
 	}
 
 	// Calcolo l'indice della versione d'appartenenza di un file, data in input
-	// la data del commit
-	public int getCommitAppartainingVersionIndex(LocalDate fileCommitDate) {
-
+	// la data del commit. Formato -->2013-03-27 = [4.2.1, 5]. 
+	public int getCommitAppartainingVersionIndex(LocalDate fileCommitDate, String projectName) {
+		
 		int lastIndex = 0;
-
 		// Itero su tutte le versioni che hanno una release date
 		for (LocalDate ld : versionListWithReleaseDateAndIndex.keySet()) {
-
 			Collection<String> lineKey = versionListWithReleaseDateAndIndex.get(ld);
-
 			int size = lineKey.size();
 			String lastIndexValue = null;
 
 			// Se la size è uguale a 3, prendo il terzo elemento come indice, altrimenti il
-			// secondo
+			// secondo. BookKeeper ha tutti elementi di size 2. OpenJPA anche size 3.
 			if (size == 3) {
 				lastIndexValue = Iterables.get(lineKey, 2);
 			} else {
 				lastIndexValue = Iterables.get(lineKey, 1);
 			}
-
+			
 			lastIndex = Integer.valueOf(lastIndexValue);
-
-			// Mi interrompo se trovo la versione d'appartenenza del file
-			// prima della fine dell'iterazione
+			
+			// Mi interrompo se la data della versione in questione è successiva a quella del commit
+			// passato come parametro.
 			if (ld.isAfter(fileCommitDate)) {
 				break;
 			}
@@ -374,7 +378,7 @@ public class JiraLogic {
 	}
 
 	// Mi calcolo il valore di Proportion dei ticket precedenti (se ce ne sono,
-	// altrimenti il valore è zero)
+	// altrimenti il valore è zero). Applico proportion increment.
 
 	public double getProportionPreviousTicket(int ticketID) {
 
@@ -413,7 +417,7 @@ public class JiraLogic {
 	}
 
 	// Controllo gli indici di IV e FV ed aggiungo il ticket al commit con lista
-	// delle Affected Version valida
+	// delle Affected Version valida. Prendo l'ID del ticket, l'indice di FV e di IV.
 	public void getBuggyVersions(int ticketID, int fvIndx, int ivIndx) {
 
 		List<Integer> avVersionListNotEmpty = new ArrayList<>();
@@ -463,7 +467,7 @@ public class JiraLogic {
 		return fvIndex;
 	}
 
-	// Calcolo l'indice dell'Opening Version
+	// Calcolo l'indice dell'Opening Version, usando la data di creazione del ticket.
 	public int getOpeningVersion(String ticketCreationDate) throws NumberFormatException {
 
 		int ovIndex = 0;
@@ -498,7 +502,9 @@ public class JiraLogic {
 		return ovIndex;
 	}
 
-	// Calcolo l'indice della IV più vecchia a partire dalla lista delle AV di Jira
+	// Calcolo l'indice della IV più vecchia a partire dalla lista delle AV di Jira. Qui
+	// prendo la lista delle Affected Version da Jira e la data di creazione del ticket,
+	// sempre da Jira.
 	public int getIVfromAffectedVersion(List<String> avVersionList, String creationDate) {
 
 		int ivVersion = 0;
@@ -514,7 +520,7 @@ public class JiraLogic {
 
 //				Controllo se l'indice della versione è uguale a quella contenuta nella lista,
 //				controllando inoltre che la versione di rilascio è precedente alla creazione del
-//				ticket
+//				ticket. 
 				if (Iterables.get(versionListWithReleaseDateAndIndex.get(ld), 0).equals(s)
 						&& ld.isBefore(LocalDate.parse(creationDate))) {
 

@@ -64,8 +64,7 @@ public class DatasetCreator {
 							.atZone(ZoneId.systemDefault()).toLocalDate();
 
 					// Prendo la versione di appartenenza del commit
-					int appartainingVersion = jiraLogic.getCommitAppartainingVersionIndex(commitDate);
-
+					int appartainingVersion = jiraLogic.getCommitAppartainingVersionIndex(commitDate, projectName);
 					List<DiffEntry> filesChanged;
 
 					// Vedo se l'indice della versione fa parte della prima metà delle release
@@ -74,7 +73,6 @@ public class DatasetCreator {
 						//Analizzo il messaggio di commit di bugfix del ticket e lo aggiungo alla lista
 						List<Integer> ticketBugFix = jiraLogic.getTicketMessageCommitBugFix(commit.getFullMessage(),
 								projectName);
-
 						// Prendo la lista dei ticket associati al commit
 						List<Integer> ticketInformationBugginess = jiraLogic
 								.getTicketMessageCommitBuggy(commit.getFullMessage(), projectName);
@@ -104,7 +102,7 @@ public class DatasetCreator {
 											latestVersion + 1);
 
 									mapToBuildDataset.replace(appartainingVersion, singleFile.getNewPath(), fileMetrics);
-
+								
 									// Se ci sono ticket associati al commit, imposto la relativa bugginess)
 									jiraLogic.setClassBugginess(ticketInformationBugginess, singleFile,
 											latestVersion + 1);

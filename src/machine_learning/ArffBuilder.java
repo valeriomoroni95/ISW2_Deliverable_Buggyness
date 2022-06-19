@@ -82,8 +82,6 @@ public class ArffBuilder {
 						defectiveCount += appendToCSV(csvMaker, line);
 					}
 				}
-				System.out.println("Training defective: "+ defectiveCount);
-				System.out.println("Training file: "+ fileCount);
 				csvMaker.flush();
 
 				statsHolder.add(fileCount);
@@ -137,8 +135,6 @@ public class ArffBuilder {
 						defectiveCount += appendToCSV(csvWriter, line);
 					}
 				}
-				System.out.println("Testing defective: "+defectiveCount);
-				System.out.println("Testing file: "+fileCount);
 				csvWriter.flush();
 				statsHolder.add(fileCount);
 				statsHolder.add(defectiveCount);

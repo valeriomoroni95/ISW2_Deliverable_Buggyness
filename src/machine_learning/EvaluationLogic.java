@@ -19,10 +19,10 @@ public class EvaluationLogic {
 	public static void main(String[] args) throws Exception{
 
 		//Dichiaro in una lista i progetti da svolgere: posso farli insieme o uno alla volta.
-		String[] projects = {"BOOKKEEPER"}; //, "OPENJPA"};
+		String[] projects = {"BOOKKEEPER", "OPENJPA"};
 
 		//Dichiaro il numero di revisioni di ogni progetto (Bookkeeper:7, OpenJpa:18)
-		Integer[] maxVersions = {7};//, 18};
+		Integer[] maxVersions = {7, 18};
 
 		//Per ciascun progetto
 		for (int i = 0; i < projects.length; i++) {
@@ -38,9 +38,11 @@ public class EvaluationLogic {
 
 					//Creo il file .arff per il training, fino alla versione n-esima del progetto in questione
 					//Itero dalla prima all'ultima, una alla volta.
+					System.out.println("Creo training con walking forward all'iterazione: "+j);
 					ArffBuilder.buildTrainingSetWalkForward(projects[i], j);
 
 					//Creo il file .arff per il testing, fino alla versione n+1, secondo la tecnica Walk Forward
+					System.out.println("Creo testing con walking forward all'iterazione: "+(j+1));
 					ArffBuilder.buildTestingSetWalkForward(projects[i] ,j+1);
 
 					// Prendo i file .arff appena creati per darli in input a Weka
@@ -73,10 +75,8 @@ public class EvaluationLogic {
 					// Scrivo poi il risultato sul file in output.
 					evaluate.evaluateModel(classifierNaiveBayes, testingSet); 
 					csvMaker.append(projects[i] + "," + j + ",NaiveBayes," + evaluate.precision(0) + "," + evaluate.recall(0) +  "," + evaluate.areaUnderROC(0) + "," + evaluate.kappa() + "\n");
-					System.out.println(projects[i] + "," + j + ",NaiveBayes," + evaluate.precision(0) + "," + evaluate.recall(0) +  "," + evaluate.areaUnderROC(0) + "," + evaluate.kappa() + "\n");
 					evaluate.evaluateModel(classifierRandomForest, testingSet); 
 					csvMaker.append(projects[i] + "," + j + ",RandomForest," + evaluate.precision(0) + "," + evaluate.recall(0) +  "," + evaluate.areaUnderROC(0) + "," + evaluate.kappa() + "\n");
-					//System.out.println(projects[i] + "," + j + ",RandomForest," + evaluate.precision(0) + "," + evaluate.recall(0) +  "," + evaluate.areaUnderROC(0) + "," + evaluate.kappa() + "\n");
 					evaluate.evaluateModel(classifierIBk, testingSet); 
 					csvMaker.append(projects[i] + "," + j + ",IBk," + evaluate.precision(0) + "," + evaluate.recall(0) +  "," + evaluate.areaUnderROC(0) + "," + evaluate.kappa() + "\n");
 
