@@ -203,7 +203,7 @@ public class TechniquesLogic {
 	//Applico il filtro specificato con la tecnica di sampling. Prende in input un classificatore con applicato un filtro,
 	//un oggetto evaluation, le istanze di training e testing, il nome del classificatore. Ritorna la valutazione del modello
 	//con i filtri applicati.
-	public static Evaluation applyFilterForSampling(FilteredClassifier filteredClassifier, Evaluation eval, Instances training, Instances testing, AbstractClassifier classifierName) throws HandledException {
+	public static Evaluation applyFilterForSampling(FilteredClassifier filteredClassifier, Evaluation eval, Instances training, Instances testing, AbstractClassifier classifierName) {
 
 		// Se è specificato un filtro, lo applico e valuto il modello. 
 		try {
