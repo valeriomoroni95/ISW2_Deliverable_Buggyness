@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.LoggerClass;
+
 public class ArffBuilder {
 	
 	//Stringhe utili per i filenames
@@ -14,8 +16,8 @@ public class ArffBuilder {
 	private static final String TESTING = "_testing.arff";
 	
 	
-	private ArffBuilder() throws Exception {
-		throw new Exception("This should not be called!");
+	private ArffBuilder() {
+		throw new IllegalStateException("This should not be called!");
 	}
 	
 	public static int appendToCSV(FileWriter csvMaker, String row) throws IOException {
@@ -42,18 +44,19 @@ public class ArffBuilder {
 	}
 	
 	
-	//Mi costruisco il file .arff per il training set
+	//Mi costruisco il file .arff per il training set. Ritorna una lista di interi che mi servirà in FinalEvaluation.
 	public static List<Integer> buildTrainingSetWalkForward(String projectName, int trainingLimit) throws IOException {
 
 		int fileCount = 0;
 		int defectiveCount = 0;
 
 		ArrayList<Integer> statsHolder = new ArrayList<>();
-
+		
+		LoggerClass.infoLog("Sto costruendo il training set, applicando Walk Forward, per il progetto "+projectName+" all'iterazione "+ trainingLimit);
 		// Creo il file .arff con il nome del progetto in questione 
 		try (FileWriter csvMaker = new FileWriter(projectName + TRAINING)) {
 
-			// Aggiungo le dichiarazioni degli attributi , del progetto e dei dati
+			// Aggiungo le dichiarazioni degli attributi, del progetto e dei dati
 			csvMaker.append("@relation " + projectName + "\n\n");
 			csvMaker.append("@attribute LOC_Touched real\n");
 			csvMaker.append("@attribute NumberRevisions real\n");
@@ -79,14 +82,17 @@ public class ArffBuilder {
 					// Se il numero di versione rientra nei limiti, aumento il contatore e scrivo la riga
 					// in questione
 					if (Integer.parseInt(line.split(",")[0]) <= trainingLimit ) {
-
+						
+						//Aumento il contatore dei file totali
 						fileCount += 1;
-
+						
+						//Aumento il contatore delle classi defective
 						defectiveCount += appendToCSV(csvMaker, line);
 					}
 				}
 				csvMaker.flush();
-
+				
+				//Aggiungo all'Arraylist le due statistiche calcolate
 				statsHolder.add(fileCount);
 				statsHolder.add(defectiveCount);
 
@@ -96,12 +102,15 @@ public class ArffBuilder {
 		}
 	}
 
-	//Mi costruisco il file .arff per il testing set
+	//Mi costruisco il file .arff per il testing set. Ritorna una lista di interi che mi servirà in FinalEvaluation.
 	public static List<Integer> buildTestingSetWalkForward(String projectName, int testing) throws IOException {
 
 		int fileCount = 0;
 		int defectiveCount = 0;
 		ArrayList<Integer> statsHolder = new ArrayList<>();
+		
+		LoggerClass.infoLog("Sto costruendo il testing set, applicando Walk Forward, per il progetto "+projectName+" all'iterazione "+testing);
+		
 		// Creo il file .arff con il nome del progetto preso in esame
 		try (FileWriter csvWriter = new FileWriter(projectName + TESTING)) {
 
@@ -134,11 +143,14 @@ public class ArffBuilder {
 
 						fileCount+= 1;
 
-						// Aggiungo le righe lette dal csv senza le prime due colonne
+						// Aggiungo le righe lette dal csv senza le prime due colonne, aggiungendo
+						// il numero di classi defective al contatore
 						defectiveCount += appendToCSV(csvWriter, line);
 					}
 				}
 				csvWriter.flush();
+				
+				//Aggiungo all'Arraylist le due statistiche calcolate
 				statsHolder.add(fileCount);
 				statsHolder.add(defectiveCount);
 			}

@@ -225,18 +225,18 @@ public class JiraLogic {
 	// Imposto il file come "buggy" nella multi key map del dataset
 
 	@SuppressWarnings("unchecked")
-	public void setClassBugginess(List<Integer> ticketAssociatedWithCommit, DiffEntry entry, int numberOfVersions) {
+	public void setClassBugginess(List<Integer> ticketInformationBugginess, DiffEntry entry, int numberOfVersions) {
 
 		// Controllo la lista dei ticket associati al commit ed il tipo di modifiche
 		// apportate al file
-		if (!ticketAssociatedWithCommit.isEmpty() && (entry.getChangeType() == DiffEntry.ChangeType.MODIFY
+		if (!ticketInformationBugginess.isEmpty() && (entry.getChangeType() == DiffEntry.ChangeType.MODIFY
 				|| entry.getChangeType() == DiffEntry.ChangeType.DELETE)) {
 
 			// Per ogni ticket (IV, OV, ticketId), vado a passi di 3
-			for (int i = 0; i < ticketAssociatedWithCommit.size(); i += 3) {
+			for (int i = 0; i < ticketInformationBugginess.size(); i += 3) {
 
-				int startVersion = ticketAssociatedWithCommit.get(i);
-				int endVersion = ticketAssociatedWithCommit.get(i + 1);
+				int startVersion = ticketInformationBugginess.get(i);
+				int endVersion = ticketInformationBugginess.get(i + 1);
 
 				// per ciascuna versione nella lista di AV controllo se l'indice di versione è
 				// incluso nella prima metà delle release

@@ -3,6 +3,8 @@ package machine_learning;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import main.LoggerClass;
 import weka.core.Instances;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.RandomForest;
@@ -19,10 +21,13 @@ public class EvaluationLogic {
 	public static void main(String[] args) throws Exception{
 
 		//Dichiaro in una lista i progetti da svolgere: posso farli insieme o uno alla volta.
-		String[] projects = {"BOOKKEEPER", "OPENJPA"};
+		String[] projects = {"BOOKKEEPER","OPENJPA"};
 
-		//Dichiaro il numero di revisioni di ogni progetto (Bookkeeper:7, OpenJpa:18)
-		Integer[] maxVersions = {7, 18};
+		//Dichiaro il numero di versioni di ogni progetto (Bookkeeper:7, OpenJpa:18)
+		Integer[] maxVersions = {7,18};
+		
+		LoggerClass.setupLogger();
+		LoggerClass.infoLog("Avvio il programma per il calcolo delle metriche...");
 
 		//Per ciascun progetto
 		for (int i = 0; i < projects.length; i++) {
@@ -42,7 +47,6 @@ public class EvaluationLogic {
 					ArffBuilder.buildTrainingSetWalkForward(projects[i], j);
 
 					//Creo il file .arff per il testing, fino alla versione n+1, secondo la tecnica Walk Forward
-					
 					ArffBuilder.buildTestingSetWalkForward(projects[i] ,j+1);
 
 					// Prendo i file .arff appena creati per darli in input a Weka
@@ -57,7 +61,9 @@ public class EvaluationLogic {
 					int attributesNumber = trainingSet.numAttributes();
 					trainingSet.setClassIndex(attributesNumber - 1);
 					testingSet.setClassIndex(attributesNumber - 1);
-
+					
+					LoggerClass.infoLog("Sto settando i classificatori...");
+					
 					// Faccio la new dei tre classificatori presi in esame
 					IBk classifierIBk = new IBk();
 					RandomForest classifierRandomForest = new RandomForest();
@@ -70,7 +76,9 @@ public class EvaluationLogic {
 
 					// Creo un oggetto Evaluation con i dati di training 
 					Evaluation evaluate = new Evaluation(trainingSet);	
-
+					
+					
+					LoggerClass.infoLog("Sto valutando il modello con i classificatori ed il testing set");
 					// Valuto ciascun modello con ogni classificatore ed i dati di testing
 					// Scrivo poi il risultato sul file in output.
 					evaluate.evaluateModel(classifierNaiveBayes, testingSet); 
