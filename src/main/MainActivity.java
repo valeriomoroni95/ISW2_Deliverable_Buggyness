@@ -49,7 +49,7 @@ public class MainActivity {
 		Map<Integer, List<Integer>> ticketsWithBuggyIndex;
 
 		// nomi dei progetti da svolgere, inserire entrambi uno dopo l'altro o uno alla volta
-		String[] projectList = { "BOOKKEEPER" };
+		String[] projectList = { "BOOKKEEPER", "OPENJPA" };
 		
 		//Inizializzo il logger
 		LoggerClass.setupLogger();
@@ -202,6 +202,7 @@ public class MainActivity {
 			for (; i < total && i < j; i++) {
 
 				JSONObject singleJsonObject = (JSONObject) issues.getJSONObject(i % 1000).get("fields");
+				
 				// Mi prendo la chiave, ossia il ticket ID
 				key = issues.getJSONObject(i % 1000).get("key").toString();
 				// ed il JSONArray associato alle Affected Version
@@ -216,7 +217,8 @@ public class MainActivity {
 				
 				//Lo split viene eseguito sulla "T" e viene preso il primo elemento perché è la data, dopo ci sarebbe l'ora,
 				// che ignoro perché inutile per i nostri calcoli. Sto passando la lista delle affectedVersion, la resolutionDate,
-				// la data di creazione del ticket e l'ID dello stesso.
+				// la data di creazione del ticket e l'ID dello stesso. Da qui inizio a calcolare anche proportion per i ticket
+				// con versioni valide.
 				jiraLogic.getBuggyVersionJiraAVList(affectedVersionList,
 						singleJsonObject.getString("resolutiondate").split("T")[0],
 						singleJsonObject.getString("created").split("T")[0], Integer.parseInt(key.split("-")[1]));

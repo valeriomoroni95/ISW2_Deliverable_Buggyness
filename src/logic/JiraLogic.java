@@ -283,6 +283,7 @@ public class JiraLogic {
 			// Se non ho valori errati della Fixed Version, ovvero che quest'ultima
 			// sia uguale all'OV, uguale all'IV o addirittura antecedente a quest'ultima.
 			if (!(fvIndex == ovIndex || fvIndex == ivIndex || fvIndex < ivIndex)) {
+				
 				//Mi calcolo il valore di proportion utilizzando la formula
 				proportion = getAVProportion(ivIndex, fvIndex, ovIndex);
 				
@@ -327,7 +328,7 @@ public class JiraLogic {
 			// Prendo la proportion media dei ticket precedenti
 			int proportion = (int) Math.round(getProportionPreviousTicket(i));
 
-			// Controllo se la lista delle AV è non vuota
+			// Controllo se la lista delle AV è non vuota, con il solito controllo sulle versioni
 			if (fvIndx != ovIndx) {
 
 				// Uso la formula per il calcolo dell'IV se il valore medio dei ticket precedenti è >0
@@ -389,7 +390,8 @@ public class JiraLogic {
 		// Per ogni ticket che ha un valore calcolato di Proportion
 		for (int i : proportionTickets.keySet()) {
 
-			// Controllo se l'ID del ticket è inferiore al considerato e ci sommo il valore calcolato di P
+			//Controllo se l'ID del ticket è inferiore al considerato e ci sommo il valore calcolato di P
+			//Applicazione di proportion increment
 			if (i < ticketID && Iterables.get(proportionTickets.get(i), 0) != -1.0) {
 				count += 1;
 				proportion += Iterables.get(proportionTickets.get(i), 1);

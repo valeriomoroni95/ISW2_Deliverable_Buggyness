@@ -15836,3 +15836,67 @@
   <message>Ho terminato di creare il dataset.</message>
 </record>
 </log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-07-07T21:25:34.139622Z</date>
+  <millis>1657229134139</millis>
+  <nanos>622000</nanos>
+  <sequence>0</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Avvio il programma per la creazione del dataset...</message>
+</record>
+<record>
+  <date>2022-07-07T21:25:34.972989Z</date>
+  <millis>1657229134972</millis>
+  <nanos>989000</nanos>
+  <sequence>1</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a prendere le versioni e le date delle release...</message>
+</record>
+<record>
+  <date>2022-07-07T21:26:21.648294Z</date>
+  <millis>1657229181648</millis>
+  <nanos>294000</nanos>
+  <sequence>2</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a cercare i ticket con bug, chiusi o risolti, con resolution fixed, da Jira...</message>
+</record>
+<record>
+  <date>2022-07-07T21:26:22.250401Z</date>
+  <millis>1657229182250</millis>
+  <nanos>401000</nanos>
+  <sequence>3</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio ad usare proportion dove necessario...</message>
+</record>
+<record>
+  <date>2022-07-07T21:26:22.266389Z</date>
+  <millis>1657229182266</millis>
+  <nanos>389000</nanos>
+  <sequence>4</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>main.LoggerClass</class>
+  <method>infoLog</method>
+  <thread>1</thread>
+  <message>Inizio a costruirmi i dati per il csv...</message>
+</record>
+</log>

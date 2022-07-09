@@ -80,7 +80,8 @@ public class DatasetCreator {
 						// Prendo un nuovo formatter per prendere le differenze tra commit->parent
 						// commit
 						try (DiffFormatter differencesBetweenCommits = new DiffFormatter(NullOutputStream.INSTANCE)) {
-
+							
+							//Imposto la repository da cui prendere le differenze
 							differencesBetweenCommits.setRepository(repo);
 
 							// Prendo le differenze tra i due commit
